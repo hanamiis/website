@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+:root {
+  --background: #050505;
+  --foreground: #f8f8f8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #050505 0%, #0c0c0c 100%);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: rgba(212, 175, 55, 0.4);
+  color: white;
+}
+
+img {
+  display: block;
+}
