@@ -99,6 +99,14 @@ export default function Home() {
     }
   };
 
+    const mailtoHref = `mailto:info@macanompongproduction.com?subject=${encodeURIComponent(
+      "Permintaan Info MOP"
+    )}`;
+
+    const whatsappHref = `https://wa.me/6285781733063?text=${encodeURIComponent(
+      "Halo MOP, saya ingin tanya tentang layanan Anda"
+    )}`;
+
   return (
     <main className="min-h-screen bg-[#050505] text-white">
       <motion.header style={{ opacity }} className="sticky top-0 z-50 border-b border-white/10 bg-[#050505]/90 backdrop-blur-xl">
@@ -319,8 +327,8 @@ export default function Home() {
             <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Mari wujudkan sesuatu yang luar biasa bersama kami.</h2>
             <p className="mt-4 max-w-xl text-white/70">Untuk pesan cepat, langsung kirim email atau chat WhatsApp. Untuk detail proyek, isi formulir di samping dan kami akan menerima notifikasi tanpa backend sendiri.</p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <a href="mailto:info@macanompongproduction.com?subject=Permintaan%20Info%20MOP" className="inline-flex items-center rounded-full bg-[#ffffff] px-6 py-3 font-medium text-black">Kirim Email</a>
-              <a href="https://wa.me/6285781733063?text=Halo%20MOP,%20saya%20ingin%20tanya%20tentang%20layanan%20Anda" target="_blank" rel="noreferrer" className="inline-flex items-center rounded-full border border-white/20 px-6 py-3 font-medium text-white">Chat WhatsApp</a>
+              <a href={mailtoHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center rounded-full bg-[#ffffff] px-6 py-3 font-medium text-black">Kirim Email</a>
+              <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center rounded-full border border-white/20 px-6 py-3 font-medium text-white">Chat WhatsApp</a>
             </div>
             <div className="mt-8 space-y-4 text-white/70">
               <p><span className="font-semibold text-white">Alamat:</span> Jl. PDAM-Persatuan, Ciater, Serpong, Tangerang Selatan, Banten 15310</p>
