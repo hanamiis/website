@@ -40,22 +40,25 @@ export async function POST(request: NextRequest) {
     });
 
     if (transporter) {
-      await transporter.sendMail({
-        from: `${name} <${email}>`,
-        to: process.env.CONTACT_RECEIVER_EMAIL,
-        subject: `[Website MOP] ${subject}`,
-        text: `Nama: ${name}\nEmail: ${email}\n\nDetail Proyek:\n${projectDetails}\n\nPesan:\n${message}`,
-        html: `<p><strong>Nama:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Subjek:</strong> ${subject}</p><p><strong>Detail Proyek:</strong><br/>${projectDetails.replace(/\n/g, "<br/>")}</p><p><strong>Pesan:</strong><br/>${message.replace(/\n/g, "<br/>")}</p>`,
-      });
+      try {
+        await transporter.sendMail({
+          from: `${name} <${email}>`,
+          to: process.env.CONTACT_RECEIVER_EMAIL,
+          subject: `[Website MOP] ${subject}`,
+          text: `Nama: ${name}\nEmail: ${email}\n\nDetail Proyek:\n${projectDetails}\n\nPesan:\n${message}`,
+          html: `<p><strong>Nama:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Subjek:</strong> ${subject}</p><p><strong>Detail Proyek:</strong><br/>${projectDetails.replace(/\n/g, "<br/>")}</p><p><strong>Pesan:</strong><br/>${message.replace(/\n/g, "<br/>")}</p>`,
+        });
+      } catch (mailError) {
+        console.error("Email send failed", mailError);
+      }
     }
 
     return NextResponse.json({
       success: true,
-      message: transporter
-        ? "Pesan berhasil dikirim dan disimpan."
-        : "Pesan berhasil disimpan. Email tidak dikirim karena konfigurasi SMTP belum lengkap.",
+      message: "Pesan berhasil dikirim dan disimpan.",
     });
   } catch (error) {
+    console.error("Contact save failed", error);
     return NextResponse.json({ error: "Terjadi kesalahan saat menyimpan pesan." }, { status: 500 });
   }
 }

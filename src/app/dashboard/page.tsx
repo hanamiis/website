@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { readMessages } from "@/lib/messages";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardPage() {
   const messages = await readMessages();
   const unreadCount = messages.filter((message) => !message.isRead).length;

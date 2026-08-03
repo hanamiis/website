@@ -84,12 +84,26 @@ export default function Home() {
         }),
       });
 
-      const result = await response.json();
+      const responseText = await response.text();
+      let result: { error?: string; message?: string } = {};
+
+      try {
+        result = responseText ? JSON.parse(responseText) : {};
+      } catch {
+        result = { error: responseText || "Respons server tidak valid." };
+      }
+
       if (!response.ok) {
         throw new Error(result.error || "Gagal mengirim pesan");
       }
 
-      setContactStatus("Pesan telah dikirim. Terima kasih, kami akan segera menghubungi Anda.");
+      try {
+        await fetch("/api/messages", { cache: "no-store" });
+      } catch {
+        // Ignore refresh errors; the contact submission already succeeded.
+      }
+
+      setContactStatus(result.message || "Pesan telah dikirim. Terima kasih, kami akan segera menghubungi Anda.");
       setContactName("");
       setContactEmail("");
       setContactSubject("");
