@@ -45,6 +45,7 @@ export default function Home() {
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactSubject, setContactSubject] = useState("");
+  const [contactProjectDetails, setContactProjectDetails] = useState("");
   const [contactMessage, setContactMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [contactStatus, setContactStatus] = useState<string | null>(null);
@@ -78,6 +79,7 @@ export default function Home() {
           name: contactName,
           email: contactEmail,
           subject: contactSubject,
+          projectDetails: contactProjectDetails,
           message: contactMessage,
         }),
       });
@@ -121,7 +123,7 @@ export default function Home() {
             <Link href="#portfolio" className="transition hover:text-[#ffffff]">Portofolio</Link>
             <Link href="#contact" className="transition hover:text-[#ffffff]">Kontak</Link>
           </nav>
-          <button className="rounded-full border border-[#D4AF37]/40 p-3 text-[#ffffff] md:hidden" onClick={() => setIsMenuOpen((prev) => !prev)}>
+          <button className="rounded-full border border-[#050505]/40 p-3 text-[#ffffff] md:hidden" onClick={() => setIsMenuOpen((prev) => !prev)}>
             <Menu size={18} />
           </button>
         </div>
@@ -136,18 +138,9 @@ export default function Home() {
           </div>
         ) : null}
       </motion.header>
-
+      
       <section id="home" className="relative isolate overflow-hidden">
-        <video
-          className="absolute inset-0 h-full w-full object-cover opacity-30"
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1600&q=80"
-        >
-          <source src="https://www.w3schools.com/howto/rain.mp4" type="video/mp4" />
-        </video>
+   
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.22),transparent_35%),linear-gradient(120deg,rgba(0,0,0,0.95),rgba(0,0,0,0.7))]" />
         <div className="relative mx-auto flex min-h-[92vh] max-w-7xl flex-col justify-center px-6 py-24 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-4xl">
@@ -192,7 +185,7 @@ export default function Home() {
               </div>
             </div>
           </motion.div>
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-4xl border border-[#D4AF37]/20 bg-linear-to-br from-[#D4AF37]/15 to-transparent p-8">
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-4xl border border-[#050505]/20 bg-linear-to-br from-white/15 to-transparent p-8">
             <p className="text-sm uppercase tracking-[0.35em] text-[#fbfbf9]">Kenapa Klien Memilih Kami</p>
             <div className="mt-6 space-y-6">
               <div>
@@ -233,8 +226,8 @@ export default function Home() {
           {services.map((service, index) => {
             const Icon = service.icon;
             return (
-              <motion.article key={service.title} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.05 }} className="rounded-[1.75rem] border border-white/10 bg-[#0b0b0b] p-7 transition hover:-translate-y-1 hover:border-[#D4AF37]/40">
-                <div className="mb-5 inline-flex rounded-full border border-[#D4AF37]/20 bg-[#D4AF37]/10 p-3 text-[#ffffff]">
+              <motion.article key={service.title} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.05 }} className="rounded-[1.75rem] border border-white/10 bg-[#0b0b0b] p-7 transition hover:-translate-y-1 hover:border-[#050505]/40">
+                <div className="mb-5 inline-flex rounded-full border border-[#050505]/20 bg-white/10 p-3 text-[#ffffff]">
                   <Icon size={20} />
                 </div>
                 <h3 className="text-xl font-semibold">{service.title}</h3>
@@ -313,7 +306,7 @@ export default function Home() {
         <div className="grid gap-4 md:grid-cols-5">
           {processSteps.map((step, index) => (
             <div key={step} className="rounded-3xl border border-white/10 bg-[#0b0b0b] p-6 text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 text-[#ffffff]">{index + 1}</div>
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-[#050505]/30 bg-white/10 text-[#ffffff]">{index + 1}</div>
               <h3 className="mt-4 text-lg font-semibold">{step}</h3>
             </div>
           ))}
@@ -368,12 +361,20 @@ export default function Home() {
                 placeholder="Subjek"
               />
               <textarea
+                name="projectDetails"
+                value={contactProjectDetails}
+                onChange={(event) => setContactProjectDetails(event.target.value)}
+                required
+                className="min-h-32 w-full rounded-xl border border-white/10 bg-black px-4 py-3 outline-none ring-0 text-white"
+                placeholder="Detail proyek dan kebutuhan spesifik"
+              />
+              <textarea
                 name="message"
                 value={contactMessage}
                 onChange={(event) => setContactMessage(event.target.value)}
                 required
                 className="min-h-32 w-full rounded-xl border border-white/10 bg-black px-4 py-3 outline-none ring-0 text-white"
-                placeholder="Detail proyek"
+                placeholder="Pesan tambahan"
               />
               <button type="submit" disabled={isSubmitting} className="rounded-full bg-[#ffffff] px-6 py-3 font-medium text-black">
                 {isSubmitting ? "Mengirim..." : "Kirim Pesan"}
@@ -382,7 +383,7 @@ export default function Home() {
             </form>
             <div className="overflow-hidden rounded-3xl border border-white/10">
               <iframe
-                src="https://www.google.com/maps?q=Tangerang%20Selatan%20Banten%20Indonesia&z=12&output=embed"
+                src="https://www.google.com/maps?q=Jl.+PDAM-Persatuan,+Ciater,+Serpong,+Tangerang+Selatan,+Banten+15310&z=15&output=embed"
                 className="h-72 w-full"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
