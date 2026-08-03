@@ -14,59 +14,24 @@ export interface ContactMessage {
 
 const messagesFile = path.join(process.cwd(), "src", "data", "messages.json");
 
-type GlobalWithMessages = typeof globalThis & {
-  __nyobaaMessages?: ContactMessage[];
-};
-
-const globalMessages = globalThis as GlobalWithMessages;
-
 async function ensureMessagesFile() {
   try {
     await fs.access(messagesFile);
   } catch {
-    try {
-      await fs.mkdir(path.dirname(messagesFile), { recursive: true });
-      await fs.writeFile(messagesFile, "[]", "utf8");
-    } catch {
-      // Ignore filesystem errors in hosting environments.
-    }
+    await fs.mkdir(path.dirname(messagesFile), { recursive: true });
+    await fs.writeFile(messagesFile, "[]", "utf8");
   }
-}
-
-async function persistMessages(messages: ContactMessage[]) {
-  try {
-    await ensureMessagesFile();
-    await fs.writeFile(messagesFile, JSON.stringify(messages, null, 2), "utf8");
-  } catch {
-    // Ignore filesystem errors in hosting environments.
-  }
-}
-
-function mergeMessages(fileMessages: ContactMessage[] | null): ContactMessage[] {
-  const memoryMessages = globalMessages.__nyobaaMessages ?? [];
-  const merged = [...memoryMessages, ...(fileMessages ?? [])];
-  const uniqueMessages = new Map<string, ContactMessage>();
-
-  merged.forEach((message) => {
-    uniqueMessages.set(message.id, message);
-  });
-
-  const orderedMessages = Array.from(uniqueMessages.values()).sort((a, b) => {
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
-
-  globalMessages.__nyobaaMessages = orderedMessages;
-  return orderedMessages;
 }
 
 export async function readMessages(): Promise<ContactMessage[]> {
+  await ensureMessagesFile();
+  const content = await fs.readFile(messagesFile, "utf8");
+
   try {
-    await ensureMessagesFile();
-    const content = await fs.readFile(messagesFile, "utf8");
-    const parsedMessages = JSON.parse(content) as ContactMessage[];
-    return mergeMessages(parsedMessages);
+    return JSON.parse(content) as ContactMessage[];
   } catch {
-    return mergeMessages(null);
+    await fs.writeFile(messagesFile, "[]", "utf8");
+    return [];
   }
 }
 
@@ -79,16 +44,14 @@ export async function saveMessage(message: Omit<ContactMessage, "id" | "createdA
     isRead: false,
   };
 
-  const updatedMessages = [nextMessage, ...messages.filter((item) => item.id !== nextMessage.id)];
-  globalMessages.__nyobaaMessages = updatedMessages;
-  await persistMessages(updatedMessages);
+  messages.unshift(nextMessage);
+  await fs.writeFile(messagesFile, JSON.stringify(messages, null, 2), "utf8");
   return nextMessage;
 }
 
 export async function markAllMessagesRead() {
   const messages = await readMessages();
   const updated = messages.map((message) => ({ ...message, isRead: true }));
-  globalMessages.__nyobaaMessages = updated;
-  await persistMessages(updated);
+  await fs.writeFile(messagesFile, JSON.stringify(updated, null, 2), "utf8");
   return updated;
 }
