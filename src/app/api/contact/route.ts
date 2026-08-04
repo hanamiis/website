@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-import { saveMessage } from "@/lib/messages";
+import { MessageStorageError, saveMessage } from "@/lib/messages";
 
 const smtpConfigured = Boolean(
   process.env.SMTP_HOST &&
@@ -65,6 +65,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Contact save failed", error);
+    if (error instanceof MessageStorageError) {
+      return NextResponse.json({ error: error.message }, { status: 503 });
+    }
     return NextResponse.json({ error: "Terjadi kesalahan saat menyimpan pesan." }, { status: 500 });
   }
 }

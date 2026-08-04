@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { readMessages } from "@/lib/messages";
+import { ContactMessage, MessageStorageError, readMessages } from "@/lib/messages";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +13,16 @@ export default async function DashboardPage() {
     redirect("/dashboard/login");
   }
 
-  const messages = await readMessages();
+  let messages: ContactMessage[] = [];
+  let storageError: string | null = null;
+
+  try {
+    messages = await readMessages();
+  } catch (error) {
+    storageError = error instanceof MessageStorageError
+      ? error.message
+      : "Pesan tidak dapat dimuat saat ini. Silakan coba lagi.";
+  }
   const unreadCount = messages.filter((message) => !message.isRead).length;
 
   return (
@@ -45,7 +54,11 @@ export default async function DashboardPage() {
         </div>
 
         <section className="space-y-4">
-          {messages.length === 0 ? (
+          {storageError ? (
+            <div className="rounded-4xl border border-red-400/30 bg-red-400/10 p-8 text-center text-red-100">
+              {storageError}
+            </div>
+          ) : messages.length === 0 ? (
             <div className="rounded-4xl border border-white/10 bg-[#121212] p-8 text-center text-white/70">
               Belum ada pesan yang masuk. Coba kirim pesan melalui formulir kontak di halaman utama.
             </div>
