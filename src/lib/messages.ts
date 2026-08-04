@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
+import { list, put } from "@vercel/blob";
 
 export interface ContactMessage {
   id: string;
@@ -14,6 +15,7 @@ export interface ContactMessage {
 
 const primaryMessagesFile = path.join(process.cwd(), "src", "data", "messages.json");
 const fallbackMessagesFile = process.env.VERCEL ? "/tmp/messages.json" : path.join(process.cwd(), "tmp", "messages.json");
+const blobToken = process.env.BLOB_READ_WRITE_TOKEN || process.env.VERCEL_BLOB_READ_WRITE_TOKEN;
 let inMemoryMessages: ContactMessage[] | null = null;
 
 async function getMessagesFilePath() {
@@ -44,12 +46,60 @@ async function ensureMessagesFile() {
   return filePath;
 }
 
+async function readFromBlob(): Promise<ContactMessage[] | null> {
+  if (!blobToken) {
+    return null;
+  }
+
+  try {
+    const { blobs } = await list({ prefix: "messages.json", token: blobToken });
+    const blob = blobs.find((item) => item.pathname === "messages.json");
+
+    if (!blob) {
+      return [];
+    }
+
+    const response = await fetch(blob.url);
+    if (!response.ok) {
+      return [];
+    }
+
+    const content = await response.text();
+    return JSON.parse(content) as ContactMessage[];
+  } catch (error) {
+    console.error("Failed to read messages from blob", error);
+    return null;
+  }
+}
+
+async function writeToBlob(messages: ContactMessage[]) {
+  if (!blobToken) {
+    return;
+  }
+
+  try {
+    await put("messages.json", JSON.stringify(messages, null, 2), {
+      access: "public",
+      addRandomSuffix: false,
+      token: blobToken,
+    });
+  } catch (error) {
+    console.error("Failed to persist messages to blob", error);
+  }
+}
+
 export async function readMessages(): Promise<ContactMessage[]> {
   if (inMemoryMessages) {
     return inMemoryMessages;
   }
 
   try {
+    const fromBlob = await readFromBlob();
+    if (fromBlob !== null) {
+      inMemoryMessages = fromBlob;
+      return fromBlob;
+    }
+
     const filePath = await ensureMessagesFile();
     const content = await fs.readFile(filePath, "utf8");
 
@@ -82,6 +132,8 @@ export async function saveMessage(message: Omit<ContactMessage, "id" | "createdA
   inMemoryMessages = messages;
 
   try {
+    await writeToBlob(messages);
+
     const filePath = await ensureMessagesFile();
     await fs.writeFile(filePath, JSON.stringify(messages, null, 2), "utf8");
   } catch (error) {
@@ -97,6 +149,8 @@ export async function markAllMessagesRead() {
   inMemoryMessages = updated;
 
   try {
+    await writeToBlob(updated);
+
     const filePath = await ensureMessagesFile();
     await fs.writeFile(filePath, JSON.stringify(updated, null, 2), "utf8");
   } catch (error) {
