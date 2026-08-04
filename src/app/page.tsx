@@ -15,12 +15,12 @@ const services = [
 ];
 
 const portfolioItems = [
-  { title: "Pameran Brand Mewah", category: "Proyek Pameran", image: "/portfolio-placeholder.png" },
-  { title: "Interior Rumah Pribadi", category: "Proyek Interior", image: "/portfolio-placeholder.png" },
-  { title: "Event Peluncuran Korporat", category: "Proyek Event", image: "/portfolio-placeholder.png" },
-  { title: "Pembangunan Studio Kreator", category: "Proyek Studio", image: "/portfolio-placeholder.png" },
-  { title: "Aktivasi Brand Retail", category: "Proyek Komersial", image: "/portfolio-placeholder.png" },
-  { title: "Studio Kampanye Digital", category: "Proyek Komersial", image: "/portfolio-placeholder.png" },
+  { title: "Pameran Brand Mewah", category: "Proyek Pameran", image: "/foto1.png" },
+  { title: "Interior Rumah Pribadi", category: "Proyek Interior", image: "/foto2.png" },
+  { title: "Event Peluncuran Korporat", category: "Proyek Event", image: "/foto3.png" },
+  { title: "Pembangunan Studio Kreator", category: "Proyek Studio", image: "/foto4.png" },
+  { title: "Aktivasi Brand Retail", category: "Proyek Komersial", image: "/foto5.png" },
+  { title: "Studio Kampanye Digital", category: "Proyek Komersial", image: "/foto6.png" },
 ];
 
 const testimonials = [
@@ -124,9 +124,9 @@ export default function Home() {
     )}`;
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white">
+    <main className="min-h-screen overflow-x-hidden bg-[#050505] text-white">
       <motion.header style={{ opacity }} className="sticky top-0 z-50 border-b border-white/10 bg-[#050505]/90 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <Link href="#home" className="flex items-center gap-3">
             <img src="/logoMOP.png" alt="MACAN OMPONG PRODUCTION logo" className="h-10 w-auto object-contain" />
             <span className="text-lg font-semibold tracking-[0.3em] text-[#ffffff]"></span>
@@ -142,7 +142,7 @@ export default function Home() {
           </button>
         </div>
         {isMenuOpen ? (
-          <div className="border-t border-white/10 bg-[#050505] px-6 py-4 text-sm md:hidden">
+          <div className="border-t border-white/10 bg-[#050505] px-4 py-4 text-sm sm:px-6 md:hidden">
             <div className="flex flex-col gap-3 text-white/80">
               <Link href="#about" onClick={() => setIsMenuOpen(false)}>Tentang</Link>
               <Link href="#services" onClick={() => setIsMenuOpen(false)}>Layanan</Link>
@@ -156,23 +156,23 @@ export default function Home() {
       <section id="home" className="relative isolate overflow-hidden">
    
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.22),transparent_35%),linear-gradient(120deg,rgba(0,0,0,0.95),rgba(0,0,0,0.7))]" />
-        <div className="relative mx-auto flex min-h-[92vh] max-w-7xl flex-col justify-center px-6 py-24 lg:px-8">
+        <div className="relative mx-auto flex min-h-[92vh] max-w-7xl flex-col justify-center px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-4xl">
             <div className="mb-6 flex items-center gap-4">
               <img src="/logoMOP.png" alt="MACAN OMPONG PRODUCTION logo" className="h-16 w-auto object-contain" />
               <p className="text-sm uppercase tracking-[0.4em] text-[#ffffff]"></p>
             </div>
-            <h1 className="text-4xl font-black leading-tight sm:text-6xl lg:text-7xl">
+            <h1 className="text-3xl font-black leading-[1.05] sm:text-5xl lg:text-7xl">
               Mengubah Ide Menjadi Pengalaman Luar Biasa
             </h1>
-            <p className="mt-6 max-w-2xl text-lg text-white/75 sm:text-xl">
+            <p className="mt-6 max-w-2xl text-base leading-7 text-white/75 sm:text-xl sm:leading-8">
               Produksi kreatif, desain pameran, solusi interior, dan konten digital yang dirancang untuk brand yang mengutamakan kualitas dan kesan mendalam.
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <Link href="#portfolio" className="inline-flex items-center justify-center rounded-full bg-[#ffffff] px-7 py-3 font-medium text-black transition hover:scale-[1.02]">
+              <Link href="#portfolio" className="inline-flex w-full items-center justify-center rounded-full bg-[#ffffff] px-7 py-3 font-medium text-black transition hover:scale-[1.02] sm:w-auto">
                 Lihat Portofolio <ArrowRight className="ml-2" size={18} />
               </Link>
-              <Link href="#contact" className="inline-flex items-center justify-center rounded-full border border-white/20 px-7 py-3 font-medium text-white transition hover:border-[#ffffff] hover:text-[#ffffff]">
+              <Link href="#contact" className="inline-flex w-full items-center justify-center rounded-full border border-white/20 px-7 py-3 font-medium text-white transition hover:border-[#ffffff] hover:text-[#ffffff] sm:w-auto">
                 Hubungi Kami
               </Link>
             </div>
@@ -180,7 +180,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="about" className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+      <section id="about" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-4xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
             <p className="text-sm uppercase tracking-[0.35em] text-[#ffffff]">Tentang MOP</p>
@@ -228,7 +228,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="services" className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+      <section id="services" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
         <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.35em] text-[#ffffff]">Layanan</p>
@@ -252,7 +252,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="portfolio" className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+      <section id="portfolio" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
         <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.35em] text-[#ffffff]">Portofolio</p>
@@ -286,8 +286,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
-        <div className="grid gap-6 rounded-4xl border border-white/10 bg-[#0a0a0a] p-8 md:grid-cols-4">
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+        <div className="grid gap-6 rounded-4xl border border-white/10 bg-[#0a0a0a] p-8 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat, index) => (
             <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }} className="text-center">
               <p className="text-3xl font-semibold text-[#ffffff] sm:text-4xl">{stat.value}</p>
@@ -297,12 +297,12 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
         <div className="mb-12 text-center">
             <p className="text-sm uppercase tracking-[0.35em] text-[#ffffff]">Testimoni</p>
           <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Suara klien yang mencerminkan kualitas karya kami.</h2>
         </div>
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {testimonials.map((item, index) => (
             <motion.blockquote key={item.author} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }} className="rounded-[1.75rem] border border-white/10 bg-[#0b0b0b] p-8">
               <p className="text-lg leading-8 text-white/80">“{item.quote}”</p>
@@ -312,12 +312,12 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
         <div className="mb-12 text-center">
           <p className="text-sm uppercase tracking-[0.35em] text-[#ffffff]">Proses</p>
           <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Alur kerja yang terstruktur dari ide hingga penyampaian hasil.</h2>
         </div>
-        <div className="grid gap-4 md:grid-cols-5">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {processSteps.map((step, index) => (
             <div key={step} className="rounded-3xl border border-white/10 bg-[#0b0b0b] p-6 text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-[#050505]/30 bg-white/10 text-[#ffffff]">{index + 1}</div>
@@ -327,7 +327,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="contact" className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+      <section id="contact" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
         <div className="grid gap-8 rounded-4xl border border-white/10 bg-[#0a0a0a] p-8 lg:grid-cols-[0.95fr_1.05fr]">
           <div>
             <p className="text-sm uppercase tracking-[0.35em] text-[#ffffff]">Kontak</p>
@@ -409,7 +409,7 @@ export default function Home() {
       </section>
 
       <footer className="border-t border-white/10 bg-[#050505] px-6 py-10 lg:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
+        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
           <div>
             <p className="text-lg font-semibold tracking-[0.3em] text-[#ffffff]">MACAN OMPONG PRODUCTION</p>
             <p className="mt-2 text-sm text-white/60">Produksi Kreatif, Desain Pameran, Solusi Interior, dan Konten Digital.</p>
