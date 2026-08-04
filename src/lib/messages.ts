@@ -12,7 +12,9 @@ export interface ContactMessage {
   isRead: boolean;
 }
 
-const messagesFile = path.join(process.cwd(), "src", "data", "messages.json");
+const messagesFile = process.env.VERCEL
+  ? path.join("/tmp", "messages.json")
+  : path.join(process.cwd(), "src", "data", "messages.json");
 
 async function ensureMessagesFile() {
   try {
