@@ -1,6 +1,4 @@
-import fs from "fs/promises";
-import path from "path";
-import { list, put } from "@vercel/blob";
+import { Redis } from "@upstash/redis";
 
 export interface ContactMessage {
   id: string;
@@ -13,78 +11,39 @@ export interface ContactMessage {
   isRead: boolean;
 }
 
-const primaryMessagesFile = path.join(process.cwd(), "src", "data", "messages.json");
-const fallbackMessagesFile = process.env.VERCEL ? "/tmp/messages.json" : path.join(process.cwd(), "tmp", "messages.json");
-const blobToken = process.env.BLOB_READ_WRITE_TOKEN || process.env.VERCEL_BLOB_READ_WRITE_TOKEN;
+const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL;
+const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
+const redis = REDIS_URL && REDIS_TOKEN ? new Redis({ url: REDIS_URL, token: REDIS_TOKEN }) : null;
+const REDIS_KEY = "mop_messages";
 let inMemoryMessages: ContactMessage[] | null = null;
 
-async function getMessagesFilePath() {
-  const candidates = [primaryMessagesFile, fallbackMessagesFile];
-
-  for (const candidate of candidates) {
-    try {
-      await fs.mkdir(path.dirname(candidate), { recursive: true });
-      await fs.writeFile(candidate, "[]", "utf8");
-      return candidate;
-    } catch {
-      // try the next candidate
-    }
-  }
-
-  return fallbackMessagesFile;
-}
-
-async function ensureMessagesFile() {
-  const filePath = await getMessagesFilePath();
-
-  try {
-    await fs.access(filePath);
-  } catch {
-    await fs.writeFile(filePath, "[]", "utf8");
-  }
-
-  return filePath;
-}
-
-async function readFromBlob(): Promise<ContactMessage[] | null> {
-  if (!blobToken) {
+async function readFromRedis(): Promise<ContactMessage[] | null> {
+  if (!redis) {
     return null;
   }
 
   try {
-    const { blobs } = await list({ prefix: "messages.json", token: blobToken });
-    const blob = blobs.find((item) => item.pathname === "messages.json");
-
-    if (!blob) {
+    const stored = await redis.get(REDIS_KEY);
+    if (!stored || typeof stored !== "string") {
       return [];
     }
 
-    const response = await fetch(blob.url);
-    if (!response.ok) {
-      return [];
-    }
-
-    const content = await response.text();
-    return JSON.parse(content) as ContactMessage[];
+    return JSON.parse(stored) as ContactMessage[];
   } catch (error) {
-    console.error("Failed to read messages from blob", error);
+    console.error("Failed to read messages from Redis", error);
     return null;
   }
 }
 
-async function writeToBlob(messages: ContactMessage[]) {
-  if (!blobToken) {
+async function writeToRedis(messages: ContactMessage[]) {
+  if (!redis) {
     return;
   }
 
   try {
-    await put("messages.json", JSON.stringify(messages, null, 2), {
-      access: "public",
-      addRandomSuffix: false,
-      token: blobToken,
-    });
+    await redis.set(REDIS_KEY, JSON.stringify(messages));
   } catch (error) {
-    console.error("Failed to persist messages to blob", error);
+    console.error("Failed to persist messages to Redis", error);
   }
 }
 
@@ -93,30 +52,16 @@ export async function readMessages(): Promise<ContactMessage[]> {
     return inMemoryMessages;
   }
 
-  try {
-    const fromBlob = await readFromBlob();
-    if (fromBlob !== null) {
-      inMemoryMessages = fromBlob;
-      return fromBlob;
+  if (redis) {
+    const fromRedis = await readFromRedis();
+    if (fromRedis !== null) {
+      inMemoryMessages = fromRedis;
+      return fromRedis;
     }
-
-    const filePath = await ensureMessagesFile();
-    const content = await fs.readFile(filePath, "utf8");
-
-    try {
-      const parsed = JSON.parse(content) as ContactMessage[];
-      inMemoryMessages = parsed;
-      return parsed;
-    } catch {
-      await fs.writeFile(filePath, "[]", "utf8");
-      inMemoryMessages = [];
-      return [];
-    }
-  } catch (error) {
-    console.error("Failed to read messages", error);
-    inMemoryMessages = [];
-    return [];
   }
+
+  inMemoryMessages = [];
+  return [];
 }
 
 export async function saveMessage(message: Omit<ContactMessage, "id" | "createdAt" | "isRead">) {
@@ -131,14 +76,7 @@ export async function saveMessage(message: Omit<ContactMessage, "id" | "createdA
   messages.unshift(nextMessage);
   inMemoryMessages = messages;
 
-  try {
-    await writeToBlob(messages);
-
-    const filePath = await ensureMessagesFile();
-    await fs.writeFile(filePath, JSON.stringify(messages, null, 2), "utf8");
-  } catch (error) {
-    console.error("Failed to persist messages", error);
-  }
+  await writeToRedis(messages);
 
   return nextMessage;
 }
@@ -148,14 +86,7 @@ export async function markAllMessagesRead() {
   const updated = messages.map((message) => ({ ...message, isRead: true }));
   inMemoryMessages = updated;
 
-  try {
-    await writeToBlob(updated);
-
-    const filePath = await ensureMessagesFile();
-    await fs.writeFile(filePath, JSON.stringify(updated, null, 2), "utf8");
-  } catch (error) {
-    console.error("Failed to persist read status", error);
-  }
+  await writeToRedis(updated);
 
   return updated;
 }
