@@ -39,6 +39,8 @@ export async function POST(request: NextRequest) {
       message,
     });
 
+    let emailSent = false;
+
     if (transporter) {
       try {
         await transporter.sendMail({
@@ -48,6 +50,7 @@ export async function POST(request: NextRequest) {
           text: `Nama: ${name}\nEmail: ${email}\n\nDetail Proyek:\n${projectDetails}\n\nPesan:\n${message}`,
           html: `<p><strong>Nama:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Subjek:</strong> ${subject}</p><p><strong>Detail Proyek:</strong><br/>${projectDetails.replace(/\n/g, "<br/>")}</p><p><strong>Pesan:</strong><br/>${message.replace(/\n/g, "<br/>")}</p>`,
         });
+        emailSent = true;
       } catch (mailError) {
         console.error("Email send failed", mailError);
       }
@@ -55,7 +58,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: "Pesan berhasil dikirim dan disimpan.",
+      message: emailSent
+        ? "Pesan berhasil dikirim dan disimpan."
+        : "Pesan berhasil disimpan. Tim kami akan meninjau pesan Anda segera.",
+      emailSent,
     });
   } catch (error) {
     console.error("Contact save failed", error);

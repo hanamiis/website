@@ -1,9 +1,18 @@
+import { cookies } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { readMessages } from "@/lib/messages";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
+  const cookieStore = await cookies();
+  const hasAccess = cookieStore.get("dashboard_access")?.value === "true";
+
+  if (!hasAccess) {
+    redirect("/dashboard/login");
+  }
+
   const messages = await readMessages();
   const unreadCount = messages.filter((message) => !message.isRead).length;
 

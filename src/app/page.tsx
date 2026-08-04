@@ -85,7 +85,7 @@ export default function Home() {
       });
 
       const responseText = await response.text();
-      let result: { error?: string; message?: string } = {};
+      let result: { error?: string; message?: string; emailSent?: boolean } = {};
 
       try {
         result = responseText ? JSON.parse(responseText) : {};
@@ -103,7 +103,7 @@ export default function Home() {
         // Ignore refresh errors; the contact submission already succeeded.
       }
 
-      setContactStatus(result.message || "Pesan telah dikirim. Terima kasih, kami akan segera menghubungi Anda.");
+      setContactStatus(result.message || "Pesan berhasil disimpan. Tim kami akan meninjau pesan Anda segera.");
       setContactName("");
       setContactEmail("");
       setContactSubject("");

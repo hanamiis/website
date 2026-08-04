@@ -18,19 +18,29 @@ async function ensureMessagesFile() {
   try {
     await fs.access(messagesFile);
   } catch {
-    await fs.mkdir(path.dirname(messagesFile), { recursive: true });
-    await fs.writeFile(messagesFile, "[]", "utf8");
+    try {
+      await fs.mkdir(path.dirname(messagesFile), { recursive: true });
+      await fs.writeFile(messagesFile, "[]", "utf8");
+    } catch (error) {
+      console.error("Failed to initialize messages storage", error);
+      throw error;
+    }
   }
 }
 
 export async function readMessages(): Promise<ContactMessage[]> {
-  await ensureMessagesFile();
-  const content = await fs.readFile(messagesFile, "utf8");
-
   try {
-    return JSON.parse(content) as ContactMessage[];
-  } catch {
-    await fs.writeFile(messagesFile, "[]", "utf8");
+    await ensureMessagesFile();
+    const content = await fs.readFile(messagesFile, "utf8");
+
+    try {
+      return JSON.parse(content) as ContactMessage[];
+    } catch {
+      await fs.writeFile(messagesFile, "[]", "utf8");
+      return [];
+    }
+  } catch (error) {
+    console.error("Failed to read messages", error);
     return [];
   }
 }
