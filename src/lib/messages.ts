@@ -1,4 +1,5 @@
-import { Redis } from "@upstash/redis";
+import fs from "fs/promises";
+import path from "path";
 
 export interface ContactMessage {
   id: string;
@@ -11,57 +12,37 @@ export interface ContactMessage {
   isRead: boolean;
 }
 
-const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL;
-const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
-const redis = REDIS_URL && REDIS_TOKEN ? new Redis({ url: REDIS_URL, token: REDIS_TOKEN }) : null;
-const REDIS_KEY = "mop_messages";
-let inMemoryMessages: ContactMessage[] | null = null;
+const messagesFile = path.join(process.cwd(), "src", "data", "messages.json");
 
-async function readFromRedis(): Promise<ContactMessage[] | null> {
-  if (!redis) {
-    return null;
-  }
-
+async function ensureMessagesFile() {
   try {
-    const stored = await redis.get(REDIS_KEY);
-    if (!stored || typeof stored !== "string") {
-      return [];
+    await fs.access(messagesFile);
+  } catch {
+    try {
+      await fs.mkdir(path.dirname(messagesFile), { recursive: true });
+      await fs.writeFile(messagesFile, "[]", "utf8");
+    } catch (error) {
+      console.error("Failed to initialize messages storage", error);
+      throw error;
     }
-
-    return JSON.parse(stored) as ContactMessage[];
-  } catch (error) {
-    console.error("Failed to read messages from Redis", error);
-    return null;
-  }
-}
-
-async function writeToRedis(messages: ContactMessage[]) {
-  if (!redis) {
-    return;
-  }
-
-  try {
-    await redis.set(REDIS_KEY, JSON.stringify(messages));
-  } catch (error) {
-    console.error("Failed to persist messages to Redis", error);
   }
 }
 
 export async function readMessages(): Promise<ContactMessage[]> {
-  if (inMemoryMessages) {
-    return inMemoryMessages;
-  }
+  try {
+    await ensureMessagesFile();
+    const content = await fs.readFile(messagesFile, "utf8");
 
-  if (redis) {
-    const fromRedis = await readFromRedis();
-    if (fromRedis !== null) {
-      inMemoryMessages = fromRedis;
-      return fromRedis;
+    try {
+      return JSON.parse(content) as ContactMessage[];
+    } catch {
+      await fs.writeFile(messagesFile, "[]", "utf8");
+      return [];
     }
+  } catch (error) {
+    console.error("Failed to read messages", error);
+    return [];
   }
-
-  inMemoryMessages = [];
-  return [];
 }
 
 export async function saveMessage(message: Omit<ContactMessage, "id" | "createdAt" | "isRead">) {
@@ -74,19 +55,13 @@ export async function saveMessage(message: Omit<ContactMessage, "id" | "createdA
   };
 
   messages.unshift(nextMessage);
-  inMemoryMessages = messages;
-
-  await writeToRedis(messages);
-
+  await fs.writeFile(messagesFile, JSON.stringify(messages, null, 2), "utf8");
   return nextMessage;
 }
 
 export async function markAllMessagesRead() {
   const messages = await readMessages();
   const updated = messages.map((message) => ({ ...message, isRead: true }));
-  inMemoryMessages = updated;
-
-  await writeToRedis(updated);
-
+  await fs.writeFile(messagesFile, JSON.stringify(updated, null, 2), "utf8");
   return updated;
 }
