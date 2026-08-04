@@ -24,8 +24,12 @@ const transporter = smtpConfigured
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { name, email, subject, projectDetails, message } = body;
+    const body = await request.json().catch(() => null);
+    const name = typeof body?.name === "string" ? body.name.trim() : "";
+    const email = typeof body?.email === "string" ? body.email.trim() : "";
+    const subject = typeof body?.subject === "string" ? body.subject.trim() : "";
+    const projectDetails = typeof body?.projectDetails === "string" ? body.projectDetails.trim() : "";
+    const message = typeof body?.message === "string" ? body.message.trim() : "";
 
     if (!name || !email || !subject || !projectDetails || !message) {
       return NextResponse.json({ error: "Semua field harus diisi." }, { status: 400 });

@@ -12,35 +12,59 @@ export interface ContactMessage {
   isRead: boolean;
 }
 
-const messagesFile = path.join(process.cwd(), "src", "data", "messages.json");
+const primaryMessagesFile = path.join(process.cwd(), "src", "data", "messages.json");
+const fallbackMessagesFile = process.env.VERCEL ? "/tmp/messages.json" : path.join(process.cwd(), "tmp", "messages.json");
+let inMemoryMessages: ContactMessage[] | null = null;
 
-async function ensureMessagesFile() {
-  try {
-    await fs.access(messagesFile);
-  } catch {
+async function getMessagesFilePath() {
+  const candidates = [primaryMessagesFile, fallbackMessagesFile];
+
+  for (const candidate of candidates) {
     try {
-      await fs.mkdir(path.dirname(messagesFile), { recursive: true });
-      await fs.writeFile(messagesFile, "[]", "utf8");
-    } catch (error) {
-      console.error("Failed to initialize messages storage", error);
-      throw error;
+      await fs.mkdir(path.dirname(candidate), { recursive: true });
+      await fs.writeFile(candidate, "[]", "utf8");
+      return candidate;
+    } catch {
+      // try the next candidate
     }
   }
+
+  return fallbackMessagesFile;
+}
+
+async function ensureMessagesFile() {
+  const filePath = await getMessagesFilePath();
+
+  try {
+    await fs.access(filePath);
+  } catch {
+    await fs.writeFile(filePath, "[]", "utf8");
+  }
+
+  return filePath;
 }
 
 export async function readMessages(): Promise<ContactMessage[]> {
+  if (inMemoryMessages) {
+    return inMemoryMessages;
+  }
+
   try {
-    await ensureMessagesFile();
-    const content = await fs.readFile(messagesFile, "utf8");
+    const filePath = await ensureMessagesFile();
+    const content = await fs.readFile(filePath, "utf8");
 
     try {
-      return JSON.parse(content) as ContactMessage[];
+      const parsed = JSON.parse(content) as ContactMessage[];
+      inMemoryMessages = parsed;
+      return parsed;
     } catch {
-      await fs.writeFile(messagesFile, "[]", "utf8");
+      await fs.writeFile(filePath, "[]", "utf8");
+      inMemoryMessages = [];
       return [];
     }
   } catch (error) {
     console.error("Failed to read messages", error);
+    inMemoryMessages = [];
     return [];
   }
 }
@@ -55,13 +79,29 @@ export async function saveMessage(message: Omit<ContactMessage, "id" | "createdA
   };
 
   messages.unshift(nextMessage);
-  await fs.writeFile(messagesFile, JSON.stringify(messages, null, 2), "utf8");
+  inMemoryMessages = messages;
+
+  try {
+    const filePath = await ensureMessagesFile();
+    await fs.writeFile(filePath, JSON.stringify(messages, null, 2), "utf8");
+  } catch (error) {
+    console.error("Failed to persist messages", error);
+  }
+
   return nextMessage;
 }
 
 export async function markAllMessagesRead() {
   const messages = await readMessages();
   const updated = messages.map((message) => ({ ...message, isRead: true }));
-  await fs.writeFile(messagesFile, JSON.stringify(updated, null, 2), "utf8");
+  inMemoryMessages = updated;
+
+  try {
+    const filePath = await ensureMessagesFile();
+    await fs.writeFile(filePath, JSON.stringify(updated, null, 2), "utf8");
+  } catch (error) {
+    console.error("Failed to persist read status", error);
+  }
+
   return updated;
 }
