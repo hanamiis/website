@@ -15,8 +15,18 @@ export interface ContactMessage {
 
 const MESSAGES_KEY = "mop_messages";
 const messagesFile = path.join(process.cwd(), "src", "data", "messages.json");
-const redisUrl = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL;
-const redisToken = process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN;
+function findUpstashEnvironmentValue(suffix: string) {
+  return Object.entries(process.env).find(([name, value]) =>
+    name.startsWith("UPSTASH_REDIS") && name.endsWith(suffix) && value
+  )?.[1];
+}
+
+const redisUrl = process.env.KV_REST_API_URL
+  ?? process.env.UPSTASH_REDIS_REST_URL
+  ?? findUpstashEnvironmentValue("REST_API_URL");
+const redisToken = process.env.KV_REST_API_TOKEN
+  ?? process.env.UPSTASH_REDIS_REST_TOKEN
+  ?? findUpstashEnvironmentValue("REST_API_TOKEN");
 const redis = redisUrl && redisToken ? createClient({ url: redisUrl, token: redisToken }) : null;
 
 export class MessageStorageError extends Error {
