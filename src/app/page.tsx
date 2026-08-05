@@ -348,7 +348,7 @@ export default function Home() {
             </button>
           </div>
           <div className={`${isContactFormOpen ? "block" : "hidden"} space-y-5 md:block`}>
-            <form onSubmit={handleContactSubmit} className="space-y-4 rounded-3xl border border-white/10 bg-[#121212] p-2 h-full">
+            <form onSubmit={handleContactSubmit} className="space-y-4 rounded-3xl border border-white/10 bg-[#121212] p-4 ">
               <div className="grid gap-4 sm:grid-cols-2">
                 <input
                   name="name"
