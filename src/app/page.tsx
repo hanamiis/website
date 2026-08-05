@@ -41,6 +41,7 @@ const stats = [
 export default function Home() {
   const [activeFilter, setActiveFilter] = useState("Semua");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
@@ -156,19 +157,19 @@ export default function Home() {
       <section id="home" className="relative isolate overflow-hidden">
    
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.22),transparent_35%),linear-gradient(120deg,rgba(0,0,0,0.95),rgba(0,0,0,0.7))]" />
-        <div className="relative mx-auto flex min-h-[92vh] max-w-7xl flex-col justify-center px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+        <div className="relative mx-auto flex min-h-[68svh] max-w-7xl flex-col justify-center px-4 py-12 sm:min-h-[92vh] sm:px-6 sm:py-24 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-4xl">
-            <div className="mb-6 flex items-center gap-4">
-              <img src="/logoMOP.png" alt="MACAN OMPONG PRODUCTION logo" className="h-16 w-auto object-contain" />
+            <div className="mb-4 flex items-center gap-4 sm:mb-6">
+              <img src="/logoMOP.png" alt="MACAN OMPONG PRODUCTION logo" className="h-12 w-auto object-contain sm:h-16" />
               <p className="text-sm uppercase tracking-[0.4em] text-[#ffffff]"></p>
             </div>
-            <h1 className="text-3xl font-black leading-[1.05] sm:text-5xl lg:text-7xl">
+            <h1 className="text-[2rem] font-black leading-[1.05] sm:text-5xl lg:text-7xl">
               Mengubah Ide Menjadi Pengalaman Luar Biasa
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-7 text-white/75 sm:text-xl sm:leading-8">
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-white/75 sm:mt-6 sm:text-xl sm:leading-8">
               Produksi kreatif, desain pameran, solusi interior, dan konten digital yang dirancang untuk brand yang mengutamakan kualitas dan kesan mendalam.
             </p>
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+            <div className="mt-7 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:gap-4">
               <Link href="#portfolio" className="inline-flex w-full items-center justify-center rounded-full bg-[#ffffff] px-7 py-3 font-medium text-black transition hover:scale-[1.02] sm:w-auto">
                 Lihat Portofolio <ArrowRight className="ml-2" size={18} />
               </Link>
@@ -180,105 +181,105 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="about" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-4xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
+      <section id="about" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-24 lg:px-8">
+        <div className="grid gap-5 sm:gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-2xl shadow-black/30 sm:rounded-4xl sm:p-8">
             <p className="text-sm uppercase tracking-[0.35em] text-[#ffffff]">Tentang MOP</p>
-            <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">Studio produksi kreatif premium yang menghadirkan pengalaman merek yang tak terlupakan.</h2>
-            <p className="mt-6 text-lg leading-8 text-white/70">
+            <h2 className="mt-3 text-2xl font-semibold sm:mt-4 sm:text-4xl">Studio produksi kreatif premium yang menghadirkan pengalaman merek yang tak terlupakan.</h2>
+            <p className="mt-4 text-sm leading-6 text-white/70 sm:mt-6 sm:text-lg sm:leading-8">
               Berbasis di Tangerang Selatan, MACAN OMPONG PRODUCTION (MOP) menghadirkan solusi desain pameran, desain interior, produksi event, pengembangan studio, dan konten digital dengan pendekatan yang elegan, presisi, dan berkelas.
             </p>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-[#0d0d0d] p-5">
+            <div className="mt-5 grid gap-3 sm:mt-8 sm:gap-4 sm:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-[#0d0d0d] p-4 sm:p-5">
                 <h3 className="text-xl font-semibold">Misi</h3>
-                <p className="mt-2 text-sm leading-7 text-white/60">Menciptakan lingkungan dan konten yang tak terlupakan untuk mengangkat kualitas brand, audiens, dan ruang.</p>
+                <p className="mt-2 text-sm leading-6 text-white/60 sm:leading-7">Menciptakan lingkungan dan konten yang tak terlupakan untuk mengangkat kualitas brand, audiens, dan ruang.</p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-[#0d0d0d] p-5">
+              <div className="rounded-2xl border border-white/10 bg-[#0d0d0d] p-4 sm:p-5">
                 <h3 className="text-xl font-semibold">Visi</h3>
-                <p className="mt-2 text-sm leading-7 text-white/60">Menjadi kekuatan kreatif terdepan di Indonesia melalui desain pengalaman yang berani, berkualitas, dan berdampak.</p>
+                <p className="mt-2 text-sm leading-6 text-white/60 sm:leading-7">Menjadi kekuatan kreatif terdepan di Indonesia melalui desain pengalaman yang berani, berkualitas, dan berdampak.</p>
               </div>
             </div>
           </motion.div>
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-4xl border border-[#050505]/20 bg-linear-to-br from-white/15 to-transparent p-8">
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-3xl border border-[#050505]/20 bg-linear-to-br from-white/15 to-transparent p-5 sm:rounded-4xl sm:p-8">
             <p className="text-sm uppercase tracking-[0.35em] text-[#fbfbf9]">Kenapa Klien Memilih Kami</p>
-            <div className="mt-6 space-y-6">
+            <div className="mt-4 grid grid-cols-3 gap-3 sm:mt-6 sm:block sm:space-y-6">
               <div>
-                <div className="flex items-end justify-between">
-                  <span className="text-4xl font-semibold">5,036+</span>
-                  <span className="text-sm uppercase tracking-[0.25em] text-white/50">Ulasan</span>
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+                  <span className="text-2xl font-semibold sm:text-4xl">5,036+</span>
+                  <span className="text-xs uppercase tracking-[0.15em] text-white/50 sm:text-sm sm:tracking-[0.25em]">Ulasan</span>
                 </div>
-                <p className="mt-2 text-white/70">Dipercaya oleh berbagai klien yang mencari eksekusi kreatif berkualitas tinggi.</p>
+                <p className="mt-2 hidden text-white/70 sm:block">Dipercaya oleh berbagai klien yang mencari eksekusi kreatif berkualitas tinggi.</p>
               </div>
               <div>
-                <div className="flex items-end justify-between">
-                  <span className="text-4xl font-semibold">24/7</span>
-                  <span className="text-sm uppercase tracking-[0.25em] text-white/50">Dukungan</span>
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+                  <span className="text-2xl font-semibold sm:text-4xl">24/7</span>
+                  <span className="text-xs uppercase tracking-[0.15em] text-white/50 sm:text-sm sm:tracking-[0.25em]">Dukungan</span>
                 </div>
-                <p className="mt-2 text-white/70">Kolaborasi yang fleksibel untuk peluncuran, event, dan kebutuhan produksi yang bergerak cepat.</p>
+                <p className="mt-2 hidden text-white/70 sm:block">Kolaborasi yang fleksibel untuk peluncuran, event, dan kebutuhan produksi yang bergerak cepat.</p>
               </div>
               <div>
-                <div className="flex items-end justify-between">
-                  <span className="text-4xl font-semibold">300+</span>
-                  <span className="text-sm uppercase tracking-[0.25em] text-white/50">Proyek</span>
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+                  <span className="text-2xl font-semibold sm:text-4xl">300+</span>
+                  <span className="text-xs uppercase tracking-[0.15em] text-white/50 sm:text-sm sm:tracking-[0.25em]">Proyek</span>
                 </div>
-                <p className="mt-2 text-white/70">Mulai dari pameran dan studio hingga aktivasi korporat dan kampanye konten.</p>
+                <p className="mt-2 hidden text-white/70 sm:block">Mulai dari pameran dan studio hingga aktivasi korporat dan kampanye konten.</p>
               </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      <section id="services" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-        <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <section id="services" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-24 lg:px-8">
+        <div className="mb-6 flex flex-col gap-3 sm:mb-12 sm:gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.35em] text-[#ffffff]">Layanan</p>
             <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Solusi kreatif yang disesuaikan untuk brand yang ingin tampil berbeda.</h2>
           </div>
           <p className="max-w-xl text-white/70">Kami menciptakan visual, ruang, dan pengalaman yang meninggalkan kesan kuat di berbagai bidang, mulai dari pameran, interior, event, produksi, hingga konten digital.</p>
         </div>
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
           {services.map((service, index) => {
             const Icon = service.icon;
             return (
-              <motion.article key={service.title} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.05 }} className="rounded-[1.75rem] border border-white/10 bg-[#0b0b0b] p-7 transition hover:-translate-y-1 hover:border-[#050505]/40">
-                <div className="mb-5 inline-flex rounded-full border border-[#050505]/20 bg-white/10 p-3 text-[#ffffff]">
+              <motion.article key={service.title} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.05 }} className="rounded-2xl border border-white/10 bg-[#0b0b0b] p-4 transition hover:-translate-y-1 hover:border-[#050505]/40 sm:rounded-[1.75rem] sm:p-7">
+                <div className="mb-3 inline-flex rounded-full border border-[#050505]/20 bg-white/10 p-2 text-[#ffffff] sm:mb-5 sm:p-3">
                   <Icon size={20} />
                 </div>
-                <h3 className="text-xl font-semibold">{service.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-white/65">{service.description}</p>
+                <h3 className="text-base font-semibold sm:text-xl">{service.title}</h3>
+                <p className="mt-2 hidden text-sm leading-7 text-white/65 sm:mt-3 sm:block">{service.description}</p>
               </motion.article>
             );
           })}
         </div>
       </section>
 
-      <section id="portfolio" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-        <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <section id="portfolio" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-24 lg:px-8">
+        <div className="mb-6 flex flex-col gap-3 sm:mb-10 sm:gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.35em] text-[#ffffff]">Portofolio</p>
             <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Karya pilihan yang mencakup pameran, interior, dan pengalaman merek yang berdampak.</h2>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 scrollbar-none sm:mx-0 sm:flex-wrap sm:gap-3 sm:overflow-visible sm:px-0">
             {(["Semua", "Proyek Pameran", "Proyek Interior", "Proyek Event", "Proyek Studio", "Proyek Komersial"] as const).map((filter) => (
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
-                className={`rounded-full border px-4 py-2 text-sm transition ${activeFilter === filter ? "border-[#ffffff] bg-[#ffffff] text-black" : "border-white/10 bg-transparent text-white/70 hover:border-[#fffffe] hover:text-[#fffffe]"}`}
+                className={`shrink-0 rounded-full border px-3 py-1.5 text-xs transition sm:px-4 sm:py-2 sm:text-sm ${activeFilter === filter ? "border-[#ffffff] bg-[#ffffff] text-black" : "border-white/10 bg-transparent text-white/70 hover:border-[#fffffe] hover:text-[#fffffe]"}`}
               >
                 {filter}
               </button>
             ))}
           </div>
         </div>
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
           {filteredItems.map((item, index) => (
             <motion.button key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.04 }} onClick={() => setSelectedImage(item.image)} className="group overflow-hidden rounded-[1.75rem] border border-white/10 text-left">
-              <div className="relative h-72 overflow-hidden">
+              <div className="relative h-40 overflow-hidden sm:h-72">
                 <img src={item.image} alt={item.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <p className="text-sm uppercase tracking-[0.3em] text-[#ffffff]">{item.category}</p>
-                  <h3 className="mt-2 text-xl font-semibold text-white">{item.title}</h3>
+                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-6">
+                  <p className="text-[0.625rem] uppercase tracking-[0.16em] text-[#ffffff] sm:text-sm sm:tracking-[0.3em]">{item.category.replace("Proyek ", "")}</p>
+                  <h3 className="mt-1 text-sm font-semibold text-white sm:mt-2 sm:text-xl">{item.title}</h3>
                 </div>
               </div>
             </motion.button>
@@ -286,49 +287,49 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-        <div className="grid gap-6 rounded-4xl border border-white/10 bg-[#0a0a0a] p-8 sm:grid-cols-2 lg:grid-cols-4">
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-24 lg:px-8">
+        <div className="grid grid-cols-2 gap-4 rounded-3xl border border-white/10 bg-[#0a0a0a] p-5 sm:gap-6 sm:rounded-4xl sm:p-8 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat, index) => (
             <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }} className="text-center">
-              <p className="text-3xl font-semibold text-[#ffffff] sm:text-4xl">{stat.value}</p>
-              <p className="mt-2 text-sm uppercase tracking-[0.25em] text-white/60">{stat.label}</p>
+              <p className="text-2xl font-semibold text-[#ffffff] sm:text-4xl">{stat.value}</p>
+              <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/60 sm:mt-2 sm:text-sm sm:tracking-[0.25em]">{stat.label}</p>
             </motion.div>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-        <div className="mb-12 text-center">
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-24 lg:px-8">
+        <div className="mb-6 text-center sm:mb-12">
             <p className="text-sm uppercase tracking-[0.35em] text-[#ffffff]">Testimoni</p>
           <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Suara klien yang mencerminkan kualitas karya kami.</h2>
         </div>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 scrollbar-none sm:grid sm:gap-6 sm:overflow-visible sm:pb-0 sm:grid-cols-2 lg:grid-cols-3">
           {testimonials.map((item, index) => (
-            <motion.blockquote key={item.author} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }} className="rounded-[1.75rem] border border-white/10 bg-[#0b0b0b] p-8">
+            <motion.blockquote key={item.author} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }} className="w-[85%] shrink-0 snap-start rounded-2xl border border-white/10 bg-[#0b0b0b] p-5 sm:w-auto sm:rounded-[1.75rem] sm:p-8">
               <p className="text-lg leading-8 text-white/80">“{item.quote}”</p>
-              <footer className="mt-6 text-sm uppercase tracking-[0.25em] text-[#ffffff]">{item.author}</footer>
+              <footer className="mt-4 text-xs uppercase tracking-[0.2em] text-[#ffffff] sm:mt-6 sm:text-sm sm:tracking-[0.25em]">{item.author}</footer>
             </motion.blockquote>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-        <div className="mb-12 text-center">
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-24 lg:px-8">
+        <div className="mb-6 text-center sm:mb-12">
           <p className="text-sm uppercase tracking-[0.35em] text-[#ffffff]">Proses</p>
           <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Alur kerja yang terstruktur dari ide hingga penyampaian hasil.</h2>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-5 gap-2 sm:gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {processSteps.map((step, index) => (
-            <div key={step} className="rounded-3xl border border-white/10 bg-[#0b0b0b] p-6 text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-[#050505]/30 bg-white/10 text-[#ffffff]">{index + 1}</div>
-              <h3 className="mt-4 text-lg font-semibold">{step}</h3>
+            <div key={step} className="rounded-2xl border border-white/10 bg-[#0b0b0b] p-2 text-center sm:rounded-3xl sm:p-6">
+              <div className="mx-auto flex h-7 w-7 items-center justify-center rounded-full border border-[#050505]/30 bg-white/10 text-xs text-[#ffffff] sm:h-12 sm:w-12 sm:text-base">{index + 1}</div>
+              <h3 className="mt-2 text-[0.625rem] font-semibold leading-tight sm:mt-4 sm:text-lg">{step}</h3>
             </div>
           ))}
         </div>
       </section>
 
-      <section id="contact" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-        <div className="grid gap-8 rounded-4xl border border-white/10 bg-[#0a0a0a] p-8 lg:grid-cols-[0.95fr_1.05fr]">
+      <section id="contact" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-24 lg:px-8">
+        <div className="grid gap-6 rounded-3xl border border-white/10 bg-[#0a0a0a] p-5 sm:gap-8 sm:rounded-4xl sm:p-8 lg:grid-cols-[0.95fr_1.05fr]">
           <div>
             <p className="text-sm uppercase tracking-[0.35em] text-[#ffffff]">Kontak</p>
             <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Mari wujudkan sesuatu yang luar biasa bersama kami.</h2>
@@ -342,9 +343,12 @@ export default function Home() {
               <p><span className="font-semibold text-white">Telepon:</span> (021) 75672810</p>
               <p><span className="font-semibold text-white">Jam Operasional:</span> Buka 24 Jam</p>
             </div>
+            <button type="button" onClick={() => setIsContactFormOpen((open) => !open)} className="mt-6 rounded-full border border-white/20 px-5 py-2.5 text-sm font-medium text-white md:hidden">
+              {isContactFormOpen ? "Sembunyikan Formulir" : "Isi Formulir Proyek"}
+            </button>
           </div>
-          <div className="space-y-6">
-            <form onSubmit={handleContactSubmit} className="space-y-4 rounded-3xl border border-white/10 bg-[#121212] p-6">
+          <div className={`${isContactFormOpen ? "block" : "hidden"} space-y-5 md:block`}>
+            <form onSubmit={handleContactSubmit} className="space-y-4 rounded-3xl border border-white/10 bg-[#121212] p-2 h-full">
               <div className="grid gap-4 sm:grid-cols-2">
                 <input
                   name="name"
@@ -390,12 +394,12 @@ export default function Home() {
                 className="min-h-32 w-full rounded-xl border border-white/10 bg-black px-4 py-3 outline-none ring-0 text-white"
                 placeholder="Pesan tambahan"
               />
-              <button type="submit" disabled={isSubmitting} className="rounded-full bg-[#ffffff] px-6 py-3 font-medium text-black">
+              <button type="submit" disabled={isSubmitting} className="rounded-full bg-[#ffffff]  px-6 py-3 font-medium text-black">
                 {isSubmitting ? "Mengirim..." : "Kirim Pesan"}
               </button>
               {contactStatus ? <p className="text-sm text-white/70">{contactStatus}</p> : null}
             </form>
-            <div className="overflow-hidden rounded-3xl border border-white/10">
+            <div className="hidden overflow-hidden rounded-3xl border border-white/10 md:block">
               <iframe
                 src="https://www.google.com/maps?q=Jl.+PDAM-Persatuan,+Ciater,+Serpong,+Tangerang+Selatan,+Banten+15310&z=15&output=embed"
                 className="h-72 w-full"
