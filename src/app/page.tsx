@@ -156,7 +156,7 @@ export default function Home() {
       
       <section id="home" className="relative isolate overflow-hidden">
    
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.22),transparent_35%),linear-gradient(120deg,rgba(0,0,0,0.95),rgba(0,0,0,0.7))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,transparent_35%),linear-gradient(120deg," />
         <div className="relative mx-auto flex min-h-[68svh] max-w-7xl flex-col justify-center px-4 py-12 sm:min-h-[92vh] sm:px-6 sm:py-24 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-4xl">
             <div className="mb-4 flex items-center gap-4 sm:mb-6">
